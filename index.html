@@ -1,0 +1,2447 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Nugrill 2 — Hamburgueria Artesanal | São José do Rio Preto</title>
+  <!-- Google Fonts: Syne and Plus Jakarta Sans -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600&family=Syne:wght@700;800&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-black: #121212;      /* Cast Iron */
+      --text-white: #FDFBF7;    /* Bone White */
+      --accent-orange: #FF4D00; /* Blazing Orange */
+      --accent-orange-hover: #FFB800; /* Golden Crisp */
+      --card-bg: #1A1A1A;
+      --card-border: #2A1B15;   /* Charred Wood */
+      --pill-bg: #2A1B15;
+      --pill-border: #3D2B24;
+      --font-heading: 'Syne', sans-serif;
+      --font-body: 'Plus Jakarta Sans', sans-serif;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    html, body {
+      width: 100%;
+      height: 100%;
+      height: 100dvh;
+      overflow: hidden;
+      background-color: var(--bg-black);
+      color: var(--text-white);
+      font-family: var(--font-body);
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+
+    /* Texture Overlay for a more "physical" feel */
+    body::before {
+      content: "";
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: 9999;
+      opacity: 0.03;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+    }
+
+    /* Background Atmosphere - Lanchonete Vibe */
+    .bg-atmosphere {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: -1;
+      overflow: hidden;
+    }
+
+    .bg-atmosphere::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background:
+        radial-gradient(ellipse at 20% 30%, rgba(255, 77, 0, 0.08) 0%, transparent 50%),
+        radial-gradient(ellipse at 80% 70%, rgba(255, 184, 0, 0.06) 0%, transparent 50%),
+        linear-gradient(180deg, rgba(18, 18, 18, 0.95) 0%, rgba(18, 18, 18, 0.85) 50%, rgba(18, 18, 18, 0.95) 100%);
+    }
+
+    /* Subtle pattern overlay for texture */
+    .bg-atmosphere::after {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 400 400' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+      pointer-events: none;
+    }
+
+    /* Hero Section Enhanced Background */
+    .hero-bg {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 0;
+      overflow: hidden;
+    }
+
+    .hero-bg img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      filter: brightness(0.4) contrast(1.1) saturate(1.2);
+    }
+
+    .hero-bg::after {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background:
+        radial-gradient(ellipse at center, transparent 30%, rgba(18, 18, 18, 0.6) 70%, rgba(18, 18, 18, 0.9) 100%),
+        linear-gradient(180deg, rgba(18, 18, 18, 0.5) 0%, transparent 40%, transparent 60%, rgba(18, 18, 18, 0.7) 100%);
+      pointer-events: none;
+    }
+
+    /* Heat wave effect */
+    .heat-wave {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      height: 150px;
+      background: linear-gradient(0deg, rgba(255, 77, 0, 0.1) 0%, transparent 100%);
+      pointer-events: none;
+      z-index: 1;
+      animation: heatShimmer 3s ease-in-out infinite;
+    }
+
+    @keyframes heatShimmer {
+      0%, 100% { opacity: 0.3; transform: scaleY(1); }
+      50% { opacity: 0.6; transform: scaleY(1.05); }
+    }
+
+    /* Fixed Navigation Bar */
+    .site-header {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      z-index: 1000;
+      background: rgba(0, 0, 0, 0.88);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+    }
+
+    .nav-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      max-width: 1300px;
+      margin: 0 auto;
+      padding: 16px 40px;
+    }
+
+    .logo-container {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      text-decoration: none;
+      cursor: pointer;
+      position: relative;
+    }
+
+    .logo-container::before {
+      content: "";
+      position: absolute;
+      left: -6px;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 52px;
+      height: 52px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #FF4D00, #FFB800, #E84D1A);
+      opacity: 0.18;
+      pointer-events: none;
+      z-index: -1;
+    }
+
+    .logo-img {
+      height: 80px;
+      width: auto;
+      max-width: 250px;
+      object-fit: contain;
+      filter: drop-shadow(0 6px 16px rgba(0, 0, 0, 0.8));
+      position: relative;
+      z-index: 1;
+      mix-blend-mode: screen;
+    }
+
+    .brand-title {
+      font-family: var(--font-heading);
+      font-size: 14px;
+      font-weight: 800;
+      letter-spacing: 1.2px;
+      text-transform: uppercase;
+      color: var(--text-white);
+      line-height: 1.1;
+    }
+
+    .brand-subtitle {
+      font-size: 7px;
+      font-weight: 700;
+      letter-spacing: 2.5px;
+      text-transform: uppercase;
+      color: var(--accent-orange);
+      margin-top: 1px;
+    }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 28px;
+      list-style: none;
+    }
+
+    .nav-link {
+      color: var(--text-white);
+      text-decoration: none;
+      font-size: 13px;
+      font-weight: 500;
+      letter-spacing: 0.5px;
+      position: relative;
+      padding-bottom: 5px;
+      cursor: pointer;
+      transition: color 0.2s ease;
+    }
+
+    .nav-link:hover {
+      color: var(--accent-orange);
+    }
+
+    .nav-link.active {
+      color: var(--text-white);
+    }
+
+    .nav-link.active::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      height: 2px;
+      background-color: var(--accent-orange);
+      border-radius: 2px;
+    }
+
+    /* Vertical Navigation Dots */
+    .pagination-dots {
+      position: fixed;
+      right: 24px;
+      top: 50%;
+      transform: translateY(-50%);
+      z-index: 1000;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+
+    .dot {
+      width: 9px;
+      height: 9px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.25);
+      border: 1px solid transparent;
+      cursor: pointer;
+      transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+      position: relative;
+    }
+
+    .dot:hover {
+      background: rgba(255, 255, 255, 0.6);
+      transform: scale(1.2);
+    }
+
+    .dot.active {
+      background: var(--accent-orange);
+      border-color: var(--accent-orange);
+      transform: scale(1.35);
+      box-shadow: 0 0 8px rgba(255, 77, 0, 0.35);
+    }
+
+    .dot::before {
+      content: attr(data-tooltip);
+      position: absolute;
+      right: 20px;
+      top: 50%;
+      transform: translateY(-50%) translateX(10px);
+      background: rgba(15, 15, 15, 0.95);
+      color: #FFFFFF;
+      font-size: 11px;
+      font-weight: 600;
+      padding: 4px 9px;
+      border-radius: 4px;
+      border: 1px solid #262626;
+      white-space: nowrap;
+      pointer-events: none;
+      opacity: 0;
+      transition: all 0.2s ease;
+    }
+
+    .dot:hover::before {
+      opacity: 1;
+      transform: translateY(-50%) translateX(0);
+    }
+
+    /* Fullpage Slider Track */
+    .slider-container {
+      width: 100%;
+      height: 100%;
+      height: 100dvh;
+      position: relative;
+      touch-action: none;
+    }
+
+    .slider-track {
+      width: 100%;
+      height: 100%;
+      transition: transform 0.85s cubic-bezier(0.77, 0, 0.175, 1);
+      will-change: transform;
+    }
+
+    /* Individual Section (Strictly 100vh) */
+    .section {
+      width: 100%;
+      height: 100vh;
+      height: 100dvh;
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      padding: 75px 36px 20px;
+      background-color: var(--bg-black);
+      overflow: hidden;
+      box-sizing: border-box;
+    }
+
+    /* Section Background Accents - Lanchonete atmosphere per section */
+    .section-bg-accent {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 0;
+      opacity: 0.15;
+      pointer-events: none;
+      background-size: cover;
+      background-position: center;
+      background-repeat: no-repeat;
+      filter: brightness(0.5) contrast(1.2) saturate(1.1);
+    }
+
+    /* Section 0 (Hero) - already has hero-bg, keep subtle */
+    #section-0 .section-bg-accent {
+      background-image: radial-gradient(ellipse at 50% 50%, rgba(255, 77, 0, 0.12) 0%, transparent 70%);
+    }
+
+    /* Section 1 (Destaques) - hamburger/food vibe */
+    #section-1 .section-bg-accent {
+      background-image: url("img/drinks-foods-brasil.jpg");
+    }
+
+    /* Section 2 (Cardápio) - grill/flame vibe */
+    #section-2 .section-bg-accent {
+      background-image: url("img/download-0.jpg");
+    }
+
+    /* Section 3 (Impacto) - ember/heat vibe */
+    #section-3 .section-bg-accent {
+      background-image: url("img/download-1.jpg");
+      opacity: 0.12;
+    }
+
+    /* Section 4 (Avaliações) - subtle warm glow */
+    #section-4 .section-bg-accent {
+      background-image: radial-gradient(ellipse at 50% 30%, rgba(255, 184, 0, 0.08) 0%, transparent 60%),
+                        radial-gradient(ellipse at 50% 70%, rgba(255, 77, 0, 0.06) 0%, transparent 60%);
+    }
+
+    /* Section 5 (Contato/Pedido) - warm inviting glow */
+    #section-5 .section-bg-accent {
+      background-image: radial-gradient(ellipse at 30% 50%, rgba(255, 77, 0, 0.1) 0%, transparent 50%),
+                        radial-gradient(ellipse at 70% 50%, rgba(255, 184, 0, 0.08) 0%, transparent 50%);
+    }
+
+    .section-inner {
+      width: 100%;
+      max-width: 1120px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      margin: auto;
+    }
+
+    /* Typography Utilities */
+    .text-orange {
+      color: var(--accent-orange) !important;
+    }
+
+    .section-eyebrow {
+      font-family: var(--font-body);
+      color: var(--accent-orange);
+      font-size: 10.5px;
+      font-weight: 700;
+      letter-spacing: 2.2px;
+      text-transform: uppercase;
+      margin-bottom: 6px;
+      text-align: center;
+      position: relative;
+      display: inline-block;
+    }
+
+    .section-eyebrow::before,
+    .section-eyebrow::after {
+      content: "";
+      position: absolute;
+      top: 50%;
+      width: 30px;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, var(--accent-orange));
+    }
+
+    .section-eyebrow::before {
+      left: -40px;
+      transform: translateY(-50%);
+    }
+
+    .section-eyebrow::after {
+      right: -40px;
+      transform: translateY(-50%);
+      background: linear-gradient(90deg, var(--accent-orange), transparent);
+    }
+
+    .section-title {
+      font-family: var(--font-heading);
+      font-size: 32px;
+      font-weight: 800;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      text-align: center;
+      margin-bottom: 6px;
+      max-width: 28ch;
+      line-height: 1.1;
+    }
+
+    .section-divider {
+      width: 60px;
+      height: 3px;
+      background: linear-gradient(90deg, var(--accent-orange), var(--accent-orange-hover));
+      margin-bottom: 16px;
+      margin-left: auto;
+      margin-right: auto;
+      border-radius: 2px;
+      position: relative;
+    }
+
+    .section-divider::after {
+      content: "";
+      position: absolute;
+      top: -4px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 12px;
+      height: 12px;
+      border: 2px solid var(--accent-orange);
+      border-radius: 50%;
+      background: var(--bg-black);
+    }
+
+    .section-divider::before {
+      content: "";
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 10px;
+      height: 10px;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 24 24' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M8.5 14.5A2.5 2.5 0 0 0 11 17c1.38 0 2.5-1.12 2.5-2.5 0-.61-.22-1.18-.59-1.62L12 11.88l-.91.99c-.37.45-.59 1.02-.59 1.63z' fill='%23FF4D00'/%3E%3Cpath d='M12 2c1.5 3 4 5.5 4 8.5 0 3.5-2.5 6.5-6 6.5s-6-3-6-6.5C4 7 8 4 12 2z' fill='%23FF4D00'/%3E%3C/svg%3E");
+      background-size: contain;
+      background-repeat: no-repeat;
+      background-position: center;
+      opacity: 0.6;
+      pointer-events: none;
+    }
+
+    /* Common Buttons */
+    .btn-primary {
+      background: #FFFFFF;
+      border: 1px solid #FFFFFF;
+      color: #000000;
+      font-family: var(--font-body);
+      font-size: 12px;
+      font-weight: 800;
+      letter-spacing: 1.2px;
+      text-transform: uppercase;
+      padding: 12px 24px;
+      border-radius: 6px;
+      cursor: pointer;
+      text-decoration: none;
+      transition: all 0.25s ease;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    }
+
+    .btn-primary:hover {
+      background: #E5E5E5;
+      border-color: #E5E5E5;
+      transform: translateY(-1px);
+    }
+
+    .btn-secondary {
+      background: transparent;
+      border: 1px solid var(--accent-orange);
+      color: var(--text-white);
+      font-family: var(--font-body);
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 1.2px;
+      text-transform: uppercase;
+      padding: 12px 24px;
+      border-radius: 6px;
+      cursor: pointer;
+      text-decoration: none;
+      transition: all 0.25s ease;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+    }
+
+    .btn-secondary:hover {
+      background: rgba(255, 82, 27, 0.15);
+      border-color: var(--accent-orange);
+      transform: translateY(-1px);
+    }
+
+    .btn-orange {
+      background: var(--accent-orange);
+      border: 1px solid var(--accent-orange);
+      color: #FFFFFF;
+      font-family: var(--font-body);
+      font-size: 12px;
+      font-weight: 800;
+      letter-spacing: 1.2px;
+      text-transform: uppercase;
+      padding: 13px 26px;
+      border-radius: 6px;
+      cursor: pointer;
+      text-decoration: none;
+      transition: all 0.25s ease;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    }
+
+    .btn-orange:hover {
+      background: var(--accent-orange-hover);
+      box-shadow: 0 4px 16px rgba(255, 77, 0, 0.25);
+      transform: translateY(-1px);
+    }
+
+    /* =========================================================
+       SEÇÃO 1: HERO
+       ========================================================= */
+    .pill-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      border: 1px solid var(--accent-orange);
+      color: var(--accent-orange);
+      font-family: var(--font-body);
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      padding: 5px 16px;
+      border-radius: 999px;
+      margin-bottom: 20px;
+      background: rgba(255, 77, 0, 0.08);
+      backdrop-filter: blur(10px);
+    }
+
+    .hero-title {
+      font-family: var(--font-heading);
+      font-size: clamp(40px, 8vw, 72px);
+      font-weight: 800;
+      letter-spacing: -2px;
+      text-transform: uppercase;
+      line-height: 0.95;
+      margin-bottom: 18px;
+      text-align: center;
+      max-width: 28ch;
+    }
+
+    .hero-description {
+      font-family: var(--font-body);
+      font-size: 14.5px;
+      font-weight: 400;
+      color: var(--text-white);
+      max-width: 140ch;
+      line-height: 1.6;
+      margin-bottom: 32px;
+      text-align: center;
+      opacity: 0.95;
+    }
+
+    .hero-buttons {
+      display: flex;
+      gap: 16px;
+      align-items: center;
+      margin-bottom: 36px;
+    }
+
+    .scroll-indicator {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 6px;
+      color: var(--text-white);
+      font-family: var(--font-body);
+      font-size: 9px;
+      font-weight: 600;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      opacity: 0.75;
+      cursor: pointer;
+      transition: opacity 0.2s ease, transform 0.2s ease;
+    }
+
+    .scroll-indicator:hover {
+      opacity: 1;
+      transform: translateY(2px);
+    }
+
+    .scroll-indicator::after {
+      content: '';
+      width: 1px;
+      height: 15px;
+      background: var(--text-white);
+      opacity: 0.45;
+      animation: pulseScroll 1.8s infinite ease-in-out;
+    }
+
+    @keyframes pulseScroll {
+      0%, 100% { transform: scaleY(0.7); opacity: 0.3; }
+      50% { transform: scaleY(1.2); opacity: 0.85; }
+    }
+
+    /* Hero Quick Links - Instagram & iFood */
+    .hero-quick-links {
+      display: flex;
+      gap: 16px;
+      align-items: center;
+      justify-content: center;
+      flex-wrap: wrap;
+      margin-bottom: 28px;
+      padding-top: 8px;
+    }
+
+    .quick-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 10px 16px;
+      border-radius: 999px;
+      font-family: var(--font-body);
+      font-size: 11.5px;
+      font-weight: 600;
+      letter-spacing: 0.5px;
+      text-decoration: none;
+      transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+      white-space: nowrap;
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+    }
+
+    .quick-link svg {
+      flex-shrink: 0;
+    }
+
+    .instagram-link {
+      background: linear-gradient(135deg, rgba(225, 48, 108, 0.15), rgba(253, 29, 29, 0.1), rgba(245, 96, 64, 0.1));
+      border: 1px solid rgba(225, 48, 108, 0.3);
+      color: #E1306C;
+    }
+
+    .instagram-link:hover {
+      background: linear-gradient(135deg, rgba(225, 48, 108, 0.25), rgba(253, 29, 29, 0.2), rgba(245, 96, 64, 0.2));
+      border-color: rgba(225, 48, 108, 0.5);
+      color: #FFFFFF;
+      transform: translateY(-2px);
+      box-shadow: 0 8px 24px rgba(225, 48, 108, 0.25);
+    }
+
+    .instagram-link:hover svg {
+      stroke: #FFFFFF;
+    }
+
+    .ifood-link {
+      background: linear-gradient(135deg, rgba(231, 76, 60, 0.15), rgba(192, 57, 43, 0.1));
+      border: 1px solid rgba(231, 76, 60, 0.3);
+      color: #E74C3C;
+    }
+
+    .ifood-link:hover {
+      background: linear-gradient(135deg, rgba(231, 76, 60, 0.25), rgba(192, 57, 43, 0.2));
+      border-color: rgba(231, 76, 60, 0.5);
+      color: #FFFFFF;
+      transform: translateY(-2px);
+      box-shadow: 0 8px 24px rgba(231, 76, 60, 0.25);
+    }
+
+    .ifood-link:hover svg {
+      stroke: #FFFFFF;
+    }
+
+    @media (max-width: 768px) {
+      .hero-quick-links {
+        gap: 12px;
+      }
+      .quick-link {
+        padding: 9px 14px;
+        font-size: 10.5px;
+      }
+      .quick-link span {
+        display: none;
+      }
+    }
+
+    /* =========================================================
+       SEÇÃO 2: DESTAQUES DO CARDÁPIO (FOTOS LOCAIS COM FALLBACK)
+       ========================================================= */
+    .dishes-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 20px;
+      width: 100%;
+    }
+
+    .dish-card {
+      background-color: var(--card-bg);
+      border: 2px solid var(--card-border);
+      border-radius: 0; /* Brutalist hard edges */
+      height: 310px;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      padding: 22px 18px;
+      position: relative;
+      overflow: hidden;
+      transition: border-color 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease;
+      cursor: pointer;
+      text-decoration: none;
+    }
+
+    .dish-card::before {
+      content: "";
+      position: absolute;
+      bottom: -50%;
+      left: 0;
+      width: 100%;
+      height: 50%;
+      background: linear-gradient(0deg, rgba(255, 77, 0, 0.05) 0%, transparent 100%);
+      opacity: 0;
+      transition: opacity 0.4s ease, bottom 0.6s ease;
+      z-index: 2;
+      pointer-events: none;
+    }
+
+    .dish-card:hover {
+      border-color: var(--accent-orange);
+      transform: translateY(-8px);
+      box-shadow:
+        0 20px 40px rgba(0, 0, 0, 0.9),
+        0 0 30px rgba(255, 77, 0, 0.15);
+    }
+
+    .dish-card:hover::before {
+      opacity: 1;
+      bottom: 0;
+    }
+
+    .dish-card-img {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.7s cubic-bezier(0.25, 1, 0.5, 1), filter 0.5s ease;
+      filter: brightness(0.75) contrast(1.1) saturate(1.15);
+      z-index: 1;
+    }
+
+    .dish-card:hover .dish-card-img {
+      transform: scale(1.12);
+      filter: brightness(0.95) contrast(1.15) saturate(1.2);
+    }
+
+    .dish-card-overlay {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(
+        180deg,
+        rgba(0, 0, 0, 0.05) 0%,
+        rgba(0, 0, 0, 0.2) 35%,
+        rgba(0, 0, 0, 0.6) 65%,
+        rgba(0, 0, 0, 0.95) 100%
+      );
+      z-index: 2;
+      pointer-events: none;
+    }
+
+    /* Steam effect on hover */
+    .dish-card::after {
+      content: "";
+      position: absolute;
+      bottom: 100%;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 60%;
+      height: 80px;
+      background: radial-gradient(ellipse at center, rgba(255, 255, 255, 0.1) 0%, transparent 70%);
+      opacity: 0;
+      filter: blur(10px);
+      transition: opacity 0.5s ease 0.2s;
+      z-index: 3;
+      pointer-events: none;
+    }
+
+    .dish-card:hover::after {
+      opacity: 1;
+    }
+
+    .dish-card-content {
+      position: relative;
+      z-index: 3;
+    }
+
+    .dish-rating {
+      font-family: var(--font-body);
+      color: var(--accent-orange);
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      margin-bottom: 6px;
+      text-shadow: 0 2px 4px rgba(0, 0, 0, 0.8);
+    }
+
+    .dish-name {
+      font-family: var(--font-heading);
+      font-size: 14px;
+      font-weight: 800;
+      letter-spacing: 1.2px;
+      text-transform: uppercase;
+      color: var(--text-white);
+      line-height: 1.35;
+      max-width: 32ch;
+      text-shadow: 0 2px 6px rgba(0, 0, 0, 0.9);
+    }
+
+    /* =========================================================
+       SEÇÃO 3: CARDÁPIO OFICIAL (COM FOTOS EM CADA CARD)
+       ========================================================= */
+    .filter-wrapper {
+      display: flex;
+      gap: 10px;
+      justify-content: center;
+      flex-wrap: wrap;
+      margin-bottom: 14px;
+      width: 100%;
+    }
+
+    .filter-pill {
+      background: var(--pill-bg);
+      border: 1px solid var(--pill-border);
+      color: var(--text-white);
+      font-family: var(--font-body);
+      font-size: 10.5px;
+      font-weight: 700;
+      letter-spacing: 1.2px;
+      text-transform: uppercase;
+      padding: 7px 18px;
+      border-radius: 999px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .filter-pill:hover {
+      border-color: #444444;
+    }
+
+    .filter-pill.active {
+      background: var(--accent-orange);
+      border-color: var(--accent-orange);
+      color: #ffffff;
+      box-shadow: 0 0 8px rgba(255, 77, 0, 0.2);
+    }
+
+    /* Scrollable Container inside Section 3 */
+    .menu-scroll-container {
+      width: 100%;
+      max-width: 1060px;
+      max-height: 50vh;
+      overflow-y: auto;
+      padding-right: 6px;
+      margin-bottom: 14px;
+      scrollbar-width: thin;
+      scrollbar-color: var(--accent-orange) #161616;
+    }
+
+    .menu-scroll-container::-webkit-scrollbar {
+      width: 5px;
+    }
+
+    .menu-scroll-container::-webkit-scrollbar-track {
+      background: #111111;
+      border-radius: 10px;
+    }
+
+    .menu-scroll-container::-webkit-scrollbar-thumb {
+      background: var(--accent-orange);
+      border-radius: 10px;
+    }
+
+    .menu-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 12px;
+      width: 100%;
+    }
+
+    /* Product Card with Photo */
+    .menu-card-link {
+      text-decoration: none;
+      display: block;
+    }
+
+    .menu-card {
+      background-color: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 4px;
+      padding: 12px 14px;
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      gap: 14px;
+      transition: border-color 0.25s ease, transform 0.25s ease, background 0.25s ease, box-shadow 0.25s ease;
+      height: 100%;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .menu-card::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: linear-gradient(135deg, rgba(255, 77, 0, 0.05), transparent);
+      opacity: 0;
+      transition: opacity 0.3s ease;
+      z-index: 1;
+    }
+
+    .menu-card:hover::before {
+      opacity: 1;
+    }
+
+    .menu-card:hover {
+      border-color: var(--accent-orange);
+      background-color: var(--card-bg);
+      transform: translateY(-3px);
+      box-shadow:
+        0 12px 30px rgba(0, 0, 0, 0.8),
+        0 0 20px rgba(255, 77, 0, 0.1);
+    }
+
+    .menu-card.featured {
+      border-color: rgba(255, 77, 0, 0.45);
+      background: linear-gradient(135deg, rgba(255, 77, 0, 0.12) 0%, var(--card-bg) 100%);
+    }
+
+    .menu-card.featured:hover {
+      border-color: var(--accent-orange);
+    }
+
+    /* Product Photo Thumbnail */
+    .menu-card-thumb {
+      width: 86px;
+      height: 86px;
+      min-width: 86px;
+      border-radius: 10px;
+      overflow: hidden;
+      position: relative;
+      background: #141414;
+      border: 1px solid #222222;
+      flex-shrink: 0;
+      z-index: 2;
+    }
+
+    .menu-card-thumb::after {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: linear-gradient(135deg, rgba(255, 77, 0, 0), rgba(255, 184, 0, 0.1));
+      opacity: 0;
+      transition: opacity 0.3s ease;
+      pointer-events: none;
+      z-index: 2;
+    }
+
+    .menu-card:hover .menu-card-thumb::after {
+      opacity: 1;
+    }
+
+    .menu-card-thumb img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.5s cubic-bezier(0.25, 1, 0.5, 1);
+      filter: brightness(0.95) contrast(1.05) saturate(1.1);
+    }
+
+    .menu-card:hover .menu-card-thumb img {
+      transform: scale(1.1);
+      filter: brightness(1.05) contrast(1.1) saturate(1.2);
+    }
+
+    /* Product Details */
+    .menu-card-body {
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      flex: 1;
+      min-width: 0;
+      height: 100%;
+      z-index: 2;
+      position: relative;
+    }
+
+    .menu-card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 4px;
+      gap: 8px;
+    }
+
+    .menu-item-name {
+      font-family: var(--font-body);
+      font-size: 13.5px;
+      font-weight: 700;
+      color: var(--text-white);
+      max-width: 28ch;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      transition: color 0.2s ease;
+    }
+
+    .menu-card:hover .menu-item-name {
+      color: #FFFFFF;
+    }
+
+    .menu-card.featured .menu-item-name {
+      color: var(--accent-orange);
+    }
+
+    .menu-item-price {
+      font-family: var(--font-heading);
+      font-size: 13.5px;
+      font-weight: 800;
+      color: var(--accent-orange);
+      white-space: nowrap;
+    }
+
+    .menu-item-desc {
+      font-size: 11px;
+      font-weight: 400;
+      color: #999999;
+      line-height: 1.4;
+      max-width: 70ch;
+      margin-bottom: 6px;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+
+    .menu-card-footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: auto;
+      padding-top: 4px;
+      border-top: 1px solid #161616;
+    }
+
+    .menu-item-badge {
+      font-size: 9px;
+      font-weight: 700;
+      color: var(--accent-orange);
+      letter-spacing: 0.8px;
+      text-transform: uppercase;
+    }
+
+    .menu-item-cta {
+      font-size: 9.5px;
+      font-weight: 700;
+      color: #FFFFFF;
+      letter-spacing: 0.8px;
+      display: inline-flex;
+      align-items: center;
+      gap: 3px;
+      text-transform: uppercase;
+      opacity: 0.8;
+      transition: opacity 0.2s ease, color 0.2s ease;
+    }
+
+    .menu-card:hover .menu-item-cta {
+      opacity: 1;
+      color: var(--accent-orange);
+    }
+
+    .menu-microcopy {
+      font-size: 11px;
+      color: #888888;
+      text-align: center;
+      margin-bottom: 10px;
+      max-width: 140ch;
+    }
+
+    /* =========================================================
+       SEÇÃO 4: IMPACTO / DIFERENCIAIS
+       ========================================================= */
+    .impact-card {
+      background: var(--card-bg);
+      border: 2px solid var(--card-border);
+      border-radius: 0;
+      padding: 34px 40px;
+      max-width: 820px;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .impact-card::before {
+      content: "";
+      position: absolute;
+      top: -50%;
+      left: -50%;
+      width: 200%;
+      height: 200%;
+      background: radial-gradient(circle, rgba(255, 77, 0, 0.03) 0%, transparent 60%);
+      pointer-events: none;
+      animation: pulseGlow 6s ease-in-out infinite;
+    }
+
+    @keyframes pulseGlow {
+      0%, 100% { opacity: 0.3; transform: scale(1); }
+      50% { opacity: 0.6; transform: scale(1.1); }
+    }
+
+    .impact-eyebrow {
+      font-family: var(--font-body);
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 2px;
+      color: var(--accent-orange);
+      text-transform: uppercase;
+      margin-bottom: 12px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .impact-lead {
+      font-family: var(--font-heading);
+      font-size: 26px;
+      font-weight: 800;
+      letter-spacing: 1px;
+      line-height: 1.25;
+      margin-bottom: 14px;
+      text-transform: uppercase;
+      max-width: 28ch;
+      margin-left: auto;
+      margin-right: auto;
+      position: relative;
+      z-index: 1;
+    }
+
+    .impact-highlight {
+      font-family: var(--font-body);
+      font-size: 13.5px;
+      font-weight: 700;
+      color: var(--accent-orange);
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      margin-bottom: 16px;
+    }
+
+    .impact-text {
+      font-size: 13.5px;
+      color: #CCCCCC;
+      line-height: 1.6;
+      max-width: 140ch;
+      margin: 0 auto 24px;
+    }
+
+    /* =========================================================
+       SEÇÃO 5: PROVA SOCIAL (AVALIAÇÕES REAIS)
+       ========================================================= */
+    .reviews-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 18px;
+      width: 100%;
+      max-width: 960px;
+      margin-top: 6px;
+    }
+
+    .review-card {
+      background: linear-gradient(135deg, var(--card-bg) 0%, #0D0D0D 100%);
+      border: 1px solid var(--card-border);
+      border-radius: 14px;
+      padding: 22px 20px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      min-height: 180px;
+      transition: border-color 0.25s ease, transform 0.25s ease, box-shadow 0.25s ease;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .review-card::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 3px;
+      height: 0;
+      background: linear-gradient(180deg, var(--accent-orange), var(--accent-orange-hover));
+      transition: height 0.3s ease;
+    }
+
+    .review-card:hover {
+      border-color: var(--accent-orange);
+      transform: translateY(-4px);
+      box-shadow: 0 16px 32px rgba(0, 0, 0, 0.8), 0 0 20px rgba(255, 77, 0, 0.1);
+    }
+
+    .review-card:hover::before {
+      height: 100%;
+    }
+
+    .review-stars {
+      color: var(--accent-amber);
+      font-size: 12px;
+      letter-spacing: 2px;
+      margin-bottom: 10px;
+      filter: drop-shadow(0 0 4px var(--accent-amber));
+    }
+
+    .review-quote {
+      font-family: var(--font-body);
+      font-size: 13px;
+      color: #E0E0E0;
+      line-height: 1.55;
+      font-style: italic;
+      margin-bottom: 14px;
+      flex: 1;
+    }
+
+    .review-author {
+      font-family: var(--font-body);
+      font-size: 11.5px;
+      font-weight: 700;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      color: var(--text-white);
+      border-top: 1px solid #1A1A1A;
+      padding-top: 8px;
+    }
+
+    .review-source {
+      font-family: var(--font-body);
+      font-size: 9.5px;
+      color: var(--accent-orange);
+      margin-top: 2px;
+    }
+
+    /* =========================================================
+       SEÇÃO 6: PEDIDO / CONTATO / LOCALIZAÇÃO
+       ========================================================= */
+    .contact-container {
+      display: grid;
+      grid-template-columns: 1.05fr 0.95fr;
+      gap: 24px;
+      width: 100%;
+      max-width: 960px;
+      margin-top: 4px;
+    }
+
+    .action-card {
+      background: linear-gradient(135deg, var(--card-bg) 0%, #0D0D0D 100%);
+      border: 1px solid var(--card-border);
+      border-radius: 16px;
+      padding: 28px 24px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      gap: 14px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .action-card::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 3px;
+      background: linear-gradient(90deg, var(--accent-orange), var(--accent-orange-hover));
+    }
+
+    .card-title-sm {
+      font-family: var(--font-body);
+      font-size: 13px;
+      font-weight: 700;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      color: var(--accent-orange);
+      margin-bottom: 4px;
+    }
+
+    .delivery-modes {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      margin-top: 4px;
+      margin-bottom: 6px;
+    }
+
+    .mode-pill {
+      background: var(--pill-bg);
+      border: 1px solid var(--pill-border);
+      color: var(--text-white);
+      font-family: var(--font-body);
+      font-size: 10px;
+      font-weight: 700;
+      padding: 5px 12px;
+      border-radius: 999px;
+      letter-spacing: 0.8px;
+      text-transform: uppercase;
+      transition: all 0.2s ease;
+    }
+
+    .mode-pill:hover {
+      border-color: var(--accent-orange);
+      color: var(--accent-orange);
+      background: rgba(255, 77, 0, 0.1);
+    }
+
+    .price-estimate {
+      font-family: var(--font-body);
+      font-size: 11.5px;
+      color: #888888;
+      line-height: 1.4;
+    }
+
+    .contact-info-card {
+      background: linear-gradient(135deg, var(--card-bg) 0%, #0D0D0D 100%);
+      border: 1px solid var(--card-border);
+      border-radius: 16px;
+      padding: 24px;
+      box-shadow: 0 12px 32px rgba(0, 0, 0, 0.4);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .contact-info-card::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 3px;
+      background: linear-gradient(90deg, var(--accent-orange-hover), var(--accent-orange));
+    }
+
+    .info-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 24px;
+      margin-bottom: 24px;
+    }
+
+    .info-block {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      margin-bottom: 14px;
+    }
+
+    .info-title {
+      font-family: var(--font-body);
+      font-size: 10.5px;
+      font-weight: 700;
+      letter-spacing: 1.8px;
+      text-transform: uppercase;
+      color: var(--accent-orange);
+      margin-bottom: 4px;
+    }
+
+    .info-text {
+      font-family: var(--font-body);
+      font-size: 12.5px;
+      color: #CCCCCC;
+      line-height: 1.5;
+    }
+
+    .info-link {
+      color: var(--accent-orange);
+      text-decoration: none;
+      font-family: var(--font-body);
+      font-weight: 700;
+      font-size: 11.5px;
+      display: inline-block;
+      margin-top: 4px;
+      transition: all 0.2s ease;
+    }
+
+    .info-link:hover {
+      color: var(--accent-orange-hover);
+      text-decoration: underline;
+      transform: translateX(4px);
+    }
+
+    .site-footer {
+      width: 100%;
+      text-align: center;
+      padding-top: 14px;
+      margin-top: 10px;
+      border-top: 1px solid #161616;
+      font-size: 10.5px;
+      color: #666666;
+      letter-spacing: 0.8px;
+    }
+
+    /* =========================================================
+       RESPONSIVIDADE (DESKTOP / TABLET / MOBILE)
+       ========================================================= */
+    @media (max-width: 1024px) {
+      .hero-title {
+        font-size: 44px;
+      }
+      .dishes-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 14px;
+      }
+      .dish-card {
+        height: 220px;
+        padding: 16px;
+      }
+      .menu-scroll-container {
+        max-height: 44vh;
+      }
+      .reviews-grid {
+        grid-template-columns: 1fr;
+        gap: 10px;
+      }
+      .review-card {
+        min-height: auto;
+        padding: 14px;
+      }
+      .contact-container {
+        grid-template-columns: 1fr;
+        gap: 14px;
+      }
+    }
+
+    @media (max-width: 768px) {
+      .nav-bar {
+        padding: 12px 18px;
+      }
+      .nav-links {
+        display: none;
+      }
+      .pagination-dots {
+        right: 10px;
+        gap: 10px;
+      }
+      .dot {
+        width: 7.5px;
+        height: 7.5px;
+      }
+      .section {
+        padding: 65px 16px 16px;
+      }
+      .hero-title {
+        font-size: 30px;
+        margin-bottom: 12px;
+      }
+      .hero-description {
+        font-size: 12.5px;
+        margin-bottom: 20px;
+      }
+      .hero-buttons {
+        flex-direction: column;
+        width: 100%;
+        max-width: 260px;
+        gap: 10px;
+        margin-bottom: 20px;
+      }
+      .btn-primary, .btn-secondary, .btn-orange {
+        width: 100%;
+        padding: 11px 16px;
+      }
+      .section-title {
+        font-size: 22px;
+      }
+      .dishes-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 10px;
+      }
+      .dish-card {
+        height: 180px;
+        padding: 12px;
+      }
+      .dish-name {
+        font-size: 11px;
+      }
+      .menu-grid {
+        grid-template-columns: 1fr;
+        gap: 8px;
+      }
+      .menu-card {
+        padding: 10px 12px;
+        gap: 10px;
+      }
+      .menu-card-thumb {
+        width: 70px;
+        height: 70px;
+        min-width: 70px;
+      }
+      .menu-scroll-container {
+        max-height: 42vh;
+      }
+      .impact-card {
+        padding: 22px 18px;
+      }
+      .impact-lead {
+        font-size: 20px;
+      }
+      .action-card, .contact-info-card {
+        padding: 18px 16px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Background Atmosphere - Lanchonete Vibe -->
+  <div class="bg-atmosphere" aria-hidden="true"></div>
+
+  <!-- Floating Ember Particles -->
+  <div class="ember-particles" aria-hidden="true">
+    <div class="ember"></div>
+    <div class="ember"></div>
+    <div class="ember"></div>
+    <div class="ember"></div>
+    <div class="ember"></div>
+    <div class="ember"></div>
+  </div>
+
+  <!-- Fixed Header -->
+  <header class="site-header">
+    <nav class="nav-bar">
+      <a href="javascript:void(0)" onclick="goToSection(0)" class="logo-container">
+        <img src="img/logo.jpg" alt="Nugrill 2 Hamburgueria Artesanal" class="logo-img" loading="eager" />
+        <div>
+          <div class="brand-title">NUGRILL 2</div>
+          <div class="brand-subtitle">HAMBURGUERIA ARTESANAL</div>
+        </div>
+      </a>
+
+      <ul class="nav-links">
+        <li><a class="nav-link active" onclick="goToSection(0)">Início</a></li>
+        <li><a class="nav-link" onclick="goToSection(1)">Destaques</a></li>
+        <li><a class="nav-link" onclick="goToSection(2)">Cardápio</a></li>
+        <li><a class="nav-link" onclick="goToSection(3)">Sobre</a></li>
+        <li><a class="nav-link" onclick="goToSection(4)">Avaliações</a></li>
+        <li><a class="nav-link" onclick="goToSection(5)">Pedir agora</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <!-- Side Pagination Dots -->
+  <aside class="pagination-dots" aria-label="Navegação por seções">
+    <div class="dot active" data-tooltip="Início" onclick="goToSection(0)"></div>
+    <div class="dot" data-tooltip="Destaques" onclick="goToSection(1)"></div>
+    <div class="dot" data-tooltip="Cardápio" onclick="goToSection(2)"></div>
+    <div class="dot" data-tooltip="Sobre" onclick="goToSection(3)"></div>
+    <div class="dot" data-tooltip="Avaliações" onclick="goToSection(4)"></div>
+    <div class="dot" data-tooltip="Pedir agora" onclick="goToSection(5)"></div>
+  </aside>
+
+  <!-- Slider Wrapper -->
+  <main class="slider-container" id="sliderContainer">
+    <div class="slider-track" id="sliderTrack">
+
+      <!-- =========================================================
+           SEÇÃO 1: HERO
+           ========================================================= -->
+      <section class="section" id="section-0">
+        <div class="section-bg-accent" aria-hidden="true"></div>
+        <!-- Hero Background Image -->
+        <div class="hero-bg" aria-hidden="true">
+          <img src="img/hamburger-classico.jpg" alt="Hambúrguer artesanal Nugrill" loading="eager">
+        </div>
+        <div class="heat-wave" aria-hidden="true"></div>
+        <div class="section-inner">
+          <div class="pill-badge">
+            <span>★ 4,9 NO GOOGLE</span>
+            <span>·</span>
+            <span>184 AVALIAÇÕES</span>
+          </div>
+          <h1 class="hero-title">
+            HAMBÚRGUER<br><span class="text-orange">DE VERDADE.</span>
+          </h1>
+          <p class="hero-description">
+            Hambúrgueres artesanais, petiscos e atendimento que explica cada detalhe. Peça para comer aqui, levar ou receber em casa.
+          </p>
+          <div class="hero-buttons">
+            <button class="btn-secondary" onclick="goToSection(2)">VER CARDÁPIO ></button>
+            <a href="https://pedido.brendi.com.br/nugrill-hamburgueria-artesanal?utm_source=multistores" target="_blank" rel="noopener" class="btn-primary">PEDIR AGORA</a>
+          </div>
+          
+          <!-- Social & Ordering Quick Links -->
+          <div class="hero-quick-links" aria-label="Canais rápidos de pedido e redes sociais">
+            <a href="https://www.instagram.com/nugrill.hamburgueria/" target="_blank" rel="noopener" class="quick-link instagram-link" aria-label="Siga no Instagram">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect>
+                <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path>
+                <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line>
+              </svg>
+              <span>@nugrill.hamburgueria</span>
+            </a>
+            <a href="https://www.ifood.com.br/delivery/sao-jose-do-rio-preto-sp/nugrill-2-hamburgueria-artesanal-unidade-sul" target="_blank" rel="noopener" class="quick-link ifood-link" aria-label="Pedir no iFood">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <path d="M12 2L2 7l10 5 10-5-10-5z"></path>
+                <path d="M2 17l10 5 10-5"></path>
+                <path d="M2 12l10 5 10-5"></path>
+              </svg>
+              <span>Pedir no iFood</span>
+            </a>
+          </div>
+          
+          <div class="scroll-indicator" onclick="goToSection(1)">ROLE PARA VER</div>
+        </div></section>
+
+      <!-- =========================================================
+           SEÇÃO 2: DESTAQUES DO CARDÁPIO (FOTOS REAIS)
+           ========================================================= -->
+      <section class="section" id="section-1">
+        <div class="section-bg-accent" aria-hidden="true"></div>
+        <div class="section-inner">
+          <div class="section-eyebrow">DESTAQUES DO CARDÁPIO</div>
+          <h2 class="section-title">DESTAQUES <span class="text-orange">DA CASA</span></h2>
+          <div class="section-divider"></div>
+
+          <div class="dishes-grid">
+            <!-- Card 1: Baconzudo -->
+            <a href="https://pedido.brendi.com.br/nugrill-hamburgueria-artesanal/produto/baconzudo" target="_blank" rel="noopener" class="dish-card">
+              <img 
+                src="assets/baconzudo.jpg" 
+                onerror="this.src='https://images.unsplash.com/photo-1553979459-d2229ba7433b?auto=format&fit=crop&w=800&q=80'"
+                alt="Hambúrguer Baconzudo" 
+                class="dish-card-img" 
+                loading="lazy"
+              />
+              <div class="dish-card-overlay"></div>
+              <div class="dish-card-content">
+                <div class="dish-rating">★ 4,9 NO GOOGLE · R$ 52,90</div>
+                <div class="dish-name">BACONZUDO</div>
+              </div>
+            </a>
+
+            <!-- Card 2: Canarinho -->
+            <a href="https://pedido.brendi.com.br/nugrill-hamburgueria-artesanal/produto/canarinho" target="_blank" rel="noopener" class="dish-card">
+              <img 
+                src="assets/canarinho.jpg" 
+                onerror="this.src='https://images.unsplash.com/photo-1568901346375-23c9450c58cd?auto=format&fit=crop&w=800&q=80'"
+                alt="Hambúrguer Canarinho Queijo Coalho" 
+                class="dish-card-img" 
+                loading="lazy"
+              />
+              <div class="dish-card-overlay"></div>
+              <div class="dish-card-content">
+                <div class="dish-rating">★ 4,9 NO GOOGLE · R$ 56,90</div>
+                <div class="dish-name">CANARINHO COALHO</div>
+              </div>
+            </a>
+
+            <!-- Card 3: Batata Crinkle com Costela -->
+            <a href="https://pedido.brendi.com.br/nugrill-hamburgueria-artesanal/produto/batata-crinkle-com-catupiry-e-costela" target="_blank" rel="noopener" class="dish-card">
+              <img 
+                src="assets/batata-costela.jpg" 
+                onerror="this.src='https://images.unsplash.com/photo-1623653387945-2fd25214f8fc?auto=format&fit=crop&w=800&q=80'"
+                alt="Batata Crinkle com Costela Defumada" 
+                class="dish-card-img" 
+                loading="lazy"
+              />
+              <div class="dish-card-overlay"></div>
+              <div class="dish-card-content">
+                <div class="dish-rating">★ 4,9 NO GOOGLE · R$ 39,90</div>
+                <div class="dish-name">PORÇÃO COM COSTELA</div>
+              </div>
+            </a>
+
+            <!-- Card 4: Bendito Bolinho -->
+            <a href="https://pedido.brendi.com.br/nugrill-hamburgueria-artesanal/produto/bendito-bolinho" target="_blank" rel="noopener" class="dish-card">
+              <img 
+                src="assets/bendito-bolinho.jpg" 
+                onerror="this.src='https://images.unsplash.com/photo-1541529086526-db283c563270?auto=format&fit=crop&w=800&q=80'"
+                alt="Bendito Bolinho de Cupim com Catupiry" 
+                class="dish-card-img" 
+                loading="lazy"
+              />
+              <div class="dish-card-overlay"></div>
+              <div class="dish-card-content">
+                <div class="dish-rating">★ 4,9 NO GOOGLE · R$ 34,90</div>
+                <div class="dish-name">BENDITO BOLINHO</div>
+              </div>
+            </a>
+          </div>
+        </div>
+      </section>
+
+      <!-- =========================================================
+           SEÇÃO 3: CARDÁPIO OFICIAL (COM FOTOS EM CADA CARD)
+           ========================================================= -->
+      <section class="section" id="section-2">
+        <div class="section-bg-accent" aria-hidden="true"></div>
+        <div class="section-inner">
+          <div class="section-eyebrow">ESCOLHA O SEU</div>
+          <h2 class="section-title">NOSSO <span class="text-orange">CARDÁPIO</span></h2>
+          <div class="section-divider"></div>
+
+          <!-- Category Filter Pills -->
+          <div class="filter-wrapper">
+            <button class="filter-pill active" onclick="filterMenu('all')">TODOS</button>
+            <button class="filter-pill" onclick="filterMenu('burgers')">HAMBÚRGUERES</button>
+            <button class="filter-pill" onclick="filterMenu('porcoes')">PETISCOS & PORÇÕES</button>
+            <button class="filter-pill" onclick="filterMenu('bebidas')">BEBIDAS & SOBREMESAS</button>
+          </div>
+
+          <!-- Scrollable Products Grid -->
+          <div class="menu-scroll-container">
+            <div class="menu-grid" id="menuGrid">
+
+              <!-- 1. Baconzudo -->
+              <a href="https://pedido.brendi.com.br/nugrill-hamburgueria-artesanal/produto/baconzudo" target="_blank" rel="noopener" class="menu-card-link" data-category="burgers">
+                <div class="menu-card featured">
+                  <div class="menu-card-thumb">
+                    <img src="assets/baconzudo.jpg" onerror="this.src='https://images.unsplash.com/photo-1553979459-d2229ba7433b?auto=format&fit=crop&w=400&q=80'" alt="Baconzudo" loading="lazy">
+                  </div>
+                  <div class="menu-card-body">
+                    <div class="menu-card-header">
+                      <span class="menu-item-name">Baconzudo</span>
+                      <span class="menu-item-price">R$ 52,90</span>
+                    </div>
+                    <p class="menu-item-desc">Pão brioche, burger, medalhão de bacon trançado com muçarela, geleia de pimenta e rúcula.</p>
+                    <div class="menu-card-footer">
+                      <span class="menu-item-badge">DESTAQUE · ESPECIAL</span>
+                      <span class="menu-item-cta">PEDIR &rarr;</span>
+                    </div>
+                  </div>
+                </div>
+              </a>
+
+              <!-- 2. Canarinho -->
+              <a href="https://pedido.brendi.com.br/nugrill-hamburgueria-artesanal/produto/canarinho" target="_blank" rel="noopener" class="menu-card-link" data-category="burgers">
+                <div class="menu-card">
+                  <div class="menu-card-thumb">
+                    <img src="assets/canarinho.jpg" onerror="this.src='https://images.unsplash.com/photo-1568901346375-23c9450c58cd?auto=format&fit=crop&w=400&q=80'" alt="Canarinho" loading="lazy">
+                  </div>
+                  <div class="menu-card-body">
+                    <div class="menu-card-header">
+                      <span class="menu-item-name">Canarinho</span>
+                      <span class="menu-item-price">R$ 56,90</span>
+                    </div>
+                    <p class="menu-item-desc">Pão parmesão, burger 150g, queijo coalho tostadinho, carne seca com cream cheese e vinagrete.</p>
+                    <div class="menu-card-footer">
+                      <span class="menu-item-badge">QUEIJO COALHO</span>
+                      <span class="menu-item-cta">PEDIR &rarr;</span>
+                    </div>
+                  </div>
+                </div>
+              </a>
+
+              <!-- 3. Cheddar Especial -->
+              <a href="https://pedido.brendi.com.br/nugrill-hamburgueria-artesanal/produto/cheddar-especial" target="_blank" rel="noopener" class="menu-card-link" data-category="burgers">
+                <div class="menu-card">
+                  <div class="menu-card-thumb">
+                    <img src="assets/cheddar-especial.jpg" onerror="this.src='https://images.unsplash.com/photo-1586190848861-99aa4a171e90?auto=format&fit=crop&w=400&q=80'" alt="Cheddar Especial" loading="lazy">
+                  </div>
+                  <div class="menu-card-body">
+                    <div class="menu-card-header">
+                      <span class="menu-item-name">Cheddar Especial</span>
+                      <span class="menu-item-price">R$ 48,90</span>
+                    </div>
+                    <p class="menu-item-desc">Pão brioche, burger 150g com cheddar fatiado, disco de cheddar empanado crocante e molho rosé.</p>
+                    <div class="menu-card-footer">
+                      <span class="menu-item-badge">CHEDDAR EMPANADO</span>
+                      <span class="menu-item-cta">PEDIR &rarr;</span>
+                    </div>
+                  </div>
+                </div>
+              </a>
+
+              <!-- 4. Cheddar Clássico -->
+              <a href="https://pedido.brendi.com.br/nugrill-hamburgueria-artesanal/produto/cheddar" target="_blank" rel="noopener" class="menu-card-link" data-category="burgers">
+                <div class="menu-card">
+                  <div class="menu-card-thumb">
+                    <img src="assets/cheddar-classico.jpg" onerror="this.src='https://images.unsplash.com/photo-1572802419224-296b0aeee0d9?auto=format&fit=crop&w=400&q=80'" alt="Cheddar Clássico" loading="lazy">
+                  </div>
+                  <div class="menu-card-body">
+                    <div class="menu-card-header">
+                      <span class="menu-item-name">Cheddar Clássico</span>
+                      <span class="menu-item-price">R$ 39,90</span>
+                    </div>
+                    <p class="menu-item-desc">Pão brioche macio, hambúrguer artesanal de 150g, queijo cheddar cremoso derretido e molho rosé.</p>
+                    <div class="menu-card-footer">
+                      <span class="menu-item-badge">CLÁSSICO</span>
+                      <span class="menu-item-cta">PEDIR &rarr;</span>
+                    </div>
+                  </div>
+                </div>
+              </a>
+
+              <!-- 5. Francrispy Especial -->
+              <a href="https://pedido.brendi.com.br/nugrill-hamburgueria-artesanal/produto/francrispy-especial" target="_blank" rel="noopener" class="menu-card-link" data-category="burgers">
+                <div class="menu-card">
+                  <div class="menu-card-thumb">
+                    <img src="assets/francrispy-especial.jpg" onerror="this.src='https://images.unsplash.com/photo-1625813506062-0aeb1d7a094b?auto=format&fit=crop&w=400&q=80'" alt="Francrispy Especial" loading="lazy">
+                  </div>
+                  <div class="menu-card-body">
+                    <div class="menu-card-header">
+                      <span class="menu-item-name">Francrispy Especial</span>
+                      <span class="menu-item-price">R$ 49,90</span>
+                    </div>
+                    <p class="menu-item-desc">Pão brioche com gergelim, filé de frango empanado, muçarela, Catupiry empanado, salada e molho verde.</p>
+                    <div class="menu-card-footer">
+                      <span class="menu-item-badge">CATUPIRY EMPANADO</span>
+                      <span class="menu-item-cta">PEDIR &rarr;</span>
+                    </div>
+                  </div>
+                </div>
+              </a>
+
+              <!-- 6. Francrispy -->
+              <a href="https://pedido.brendi.com.br/nugrill-hamburgueria-artesanal/produto/francrispy" target="_blank" rel="noopener" class="menu-card-link" data-category="burgers">
+                <div class="menu-card">
+                  <div class="menu-card-thumb">
+                    <img src="assets/francrispy.jpg" onerror="this.src='https://images.unsplash.com/photo-1606755962773-d324e0a13086?auto=format&fit=crop&w=400&q=80'" alt="Francrispy" loading="lazy">
+                  </div>
+                  <div class="menu-card-body">
+                    <div class="menu-card-header">
+                      <span class="menu-item-name">Francrispy</span>
+                      <span class="menu-item-price">R$ 41,90</span>
+                    </div>
+                    <p class="menu-item-desc">Pão brioche com gergelim, filé de frango empanado crocante, muçarela derretida, salada e molho verde.</p>
+                    <div class="menu-card-footer">
+                      <span class="menu-item-badge">FRANGO CROCANTE</span>
+                      <span class="menu-item-cta">PEDIR &rarr;</span>
+                    </div>
+                  </div>
+                </div>
+              </a>
+
+              <!-- 7. Bendito Bolinho -->
+              <a href="https://pedido.brendi.com.br/nugrill-hamburgueria-artesanal/produto/bendito-bolinho" target="_blank" rel="noopener" class="menu-card-link" data-category="porcoes">
+                <div class="menu-card featured">
+                  <div class="menu-card-thumb">
+                    <img src="assets/bendito-bolinho.jpg" onerror="this.src='https://images.unsplash.com/photo-1541529086526-db283c563270?auto=format&fit=crop&w=400&q=80'" alt="Bendito Bolinho" loading="lazy">
+                  </div>
+                  <div class="menu-card-body">
+                    <div class="menu-card-header">
+                      <span class="menu-item-name">Bendito Bolinho (6 un)</span>
+                      <span class="menu-item-price">R$ 34,90</span>
+                    </div>
+                    <p class="menu-item-desc">6 unidades de bolinhos de cupim sem massa, recheados com Catupiry Original cremoso e molho verde.</p>
+                    <div class="menu-card-footer">
+                      <span class="menu-item-badge">CUPIM COM CATUPIRY</span>
+                      <span class="menu-item-cta">PEDIR &rarr;</span>
+                    </div>
+                  </div>
+                </div>
+              </a>
+
+              <!-- 8. Batata Crinkle com Costela -->
+              <a href="https://pedido.brendi.com.br/nugrill-hamburgueria-artesanal/produto/batata-crinkle-com-catupiry-e-costela" target="_blank" rel="noopener" class="menu-card-link" data-category="porcoes">
+                <div class="menu-card">
+                  <div class="menu-card-thumb">
+                    <img src="assets/batata-costela.jpg" onerror="this.src='https://images.unsplash.com/photo-1623653387945-2fd25214f8fc?auto=format&fit=crop&w=400&q=80'" alt="Batata com Costela" loading="lazy">
+                  </div>
+                  <div class="menu-card-body">
+                    <div class="menu-card-header">
+                      <span class="menu-item-name">Batata com Costela</span>
+                      <span class="menu-item-price">R$ 39,90</span>
+                    </div>
+                    <p class="menu-item-desc">Batata crinkle coberta com Catupiry cremoso e costela bovina desfiada ao barbecue defumada por 8h.</p>
+                    <div class="menu-card-footer">
+                      <span class="menu-item-badge">COSTELA DEFUMADA</span>
+                      <span class="menu-item-cta">PEDIR &rarr;</span>
+                    </div>
+                  </div>
+                </div>
+              </a>
+
+              <!-- 9. NuCoalho -->
+              <a href="https://pedido.brendi.com.br/nugrill-hamburgueria-artesanal/produto/nucoalho" target="_blank" rel="noopener" class="menu-card-link" data-category="porcoes">
+                <div class="menu-card">
+                  <div class="menu-card-thumb">
+                    <img src="assets/nucoalho.jpg" onerror="this.src='https://images.unsplash.com/photo-1550547660-d9450f859349?auto=format&fit=crop&w=400&q=80'" alt="NuCoalho" loading="lazy">
+                  </div>
+                  <div class="menu-card-body">
+                    <div class="menu-card-header">
+                      <span class="menu-item-name">NuCoalho</span>
+                      <span class="menu-item-price">R$ 34,90</span>
+                    </div>
+                    <p class="menu-item-desc">Autêntico queijo coalho tostadinho na chapa quente, finalizado com fio de mel puro e orégano.</p>
+                    <div class="menu-card-footer">
+                      <span class="menu-item-badge">QUEIJO COM MEL</span>
+                      <span class="menu-item-cta">PEDIR &rarr;</span>
+                    </div>
+                  </div>
+                </div>
+              </a>
+
+              <!-- 10. Mozzarella Sticks -->
+              <a href="https://pedido.brendi.com.br/nugrill-hamburgueria-artesanal/produto/mozzarella-sticks" target="_blank" rel="noopener" class="menu-card-link" data-category="porcoes">
+                <div class="menu-card">
+                  <div class="menu-card-thumb">
+                    <img src="assets/mozzarella-sticks.jpg" onerror="this.src='https://images.unsplash.com/photo-1531749668029-2db88e4276c7?auto=format&fit=crop&w=400&q=80'" alt="Mozzarella Sticks" loading="lazy">
+                  </div>
+                  <div class="menu-card-body">
+                    <div class="menu-card-header">
+                      <span class="menu-item-name">Mozzarella Sticks (8 un)</span>
+                      <span class="menu-item-price">R$ 28,90</span>
+                    </div>
+                    <p class="menu-item-desc">8 palitos crocantes de muçarela empanados na medida certa, acompanhados de geleia de pimenta da casa.</p>
+                    <div class="menu-card-footer">
+                      <span class="menu-item-badge">8 UNIDADES</span>
+                      <span class="menu-item-cta">PEDIR &rarr;</span>
+                    </div>
+                  </div>
+                </div>
+              </a>
+
+              <!-- 11. Anéis de Cebola -->
+              <a href="https://pedido.brendi.com.br/nugrill-hamburgueria-artesanal/produto/aneis-de-cebola" target="_blank" rel="noopener" class="menu-card-link" data-category="porcoes">
+                <div class="menu-card">
+                  <div class="menu-card-thumb">
+                    <img src="assets/aneis-de-cebola.jpg" onerror="this.src='https://images.unsplash.com/photo-1639024471285-0afc38317455?auto=format&fit=crop&w=400&q=80'" alt="Anéis de Cebola" loading="lazy">
+                  </div>
+                  <div class="menu-card-body">
+                    <div class="menu-card-header">
+                      <span class="menu-item-name">Anéis de Cebola (10 un)</span>
+                      <span class="menu-item-price">R$ 17,90</span>
+                    </div>
+                    <p class="menu-item-desc">10 unidades douradas e super crocantes de cebola empanada, acompanhadas de molho barbecue.</p>
+                    <div class="menu-card-footer">
+                      <span class="menu-item-badge">ONION RINGS</span>
+                      <span class="menu-item-cta">PEDIR &rarr;</span>
+                    </div>
+                  </div>
+                </div>
+              </a>
+
+              <!-- 12. Batatinhas Smile -->
+              <a href="https://pedido.brendi.com.br/nugrill-hamburgueria-artesanal/produto/batatinhas-smile" target="_blank" rel="noopener" class="menu-card-link" data-category="porcoes">
+                <div class="menu-card">
+                  <div class="menu-card-thumb">
+                    <img src="assets/batatinhas-smile.jpg" onerror="this.src='https://images.unsplash.com/photo-1576107232684-1279f3908594?auto=format&fit=crop&w=400&q=80'" alt="Batatinhas Smile" loading="lazy">
+                  </div>
+                  <div class="menu-card-body">
+                    <div class="menu-card-header">
+                      <span class="menu-item-name">Batatinhas Smile (8 un)</span>
+                      <span class="menu-item-price">R$ 10,90</span>
+                    </div>
+                    <p class="menu-item-desc">8 unidades de batatinhas formato smile, crocantes por fora e macias por dentro.</p>
+                    <div class="menu-card-footer">
+                      <span class="menu-item-badge">KIDS & PETISCO</span>
+                      <span class="menu-item-cta">PEDIR &rarr;</span>
+                    </div>
+                  </div>
+                </div>
+              </a>
+
+              <!-- 13. Refrigerante Lata -->
+              <a href="https://pedido.brendi.com.br/nugrill-hamburgueria-artesanal/produto/refrigerante-lata" target="_blank" rel="noopener" class="menu-card-link" data-category="bebidas">
+                <div class="menu-card">
+                  <div class="menu-card-thumb">
+                    <img src="assets/refrigerante.jpg" onerror="this.src='https://images.unsplash.com/photo-1622483767028-3f66f32aef97?auto=format&fit=crop&w=400&q=80'" alt="Refrigerante Lata" loading="lazy">
+                  </div>
+                  <div class="menu-card-body">
+                    <div class="menu-card-header">
+                      <span class="menu-item-name">Refrigerante Lata 350ml</span>
+                      <span class="menu-item-price">R$ 6,90</span>
+                    </div>
+                    <p class="menu-item-desc">Coca-Cola Original, Coca Sem Açúcar, Guaraná Antarctica ou Sprite lata bem gelada.</p>
+                    <div class="menu-card-footer">
+                      <span class="menu-item-badge">LATA 350ML</span>
+                      <span class="menu-item-cta">PEDIR &rarr;</span>
+                    </div>
+                  </div>
+                </div>
+              </a>
+
+              <!-- 14. Cerveja Long Neck -->
+              <a href="https://pedido.brendi.com.br/nugrill-hamburgueria-artesanal/produto/cerveja-long-neck" target="_blank" rel="noopener" class="menu-card-link" data-category="bebidas">
+                <div class="menu-card">
+                  <div class="menu-card-thumb">
+                    <img src="assets/cerveja.jpg" onerror="this.src='https://images.unsplash.com/photo-1608270199929-e58f0c2394c8?auto=format&fit=crop&w=400&q=80'" alt="Cerveja Long Neck" loading="lazy">
+                  </div>
+                  <div class="menu-card-body">
+                    <div class="menu-card-header">
+                      <span class="menu-item-name">Cerveja Long Neck</span>
+                      <span class="menu-item-price">R$ 11,90</span>
+                    </div>
+                    <p class="menu-item-desc">Cerveja premium trincando de gelada (Heineken ou Stella Artois 330ml).</p>
+                    <div class="menu-card-footer">
+                      <span class="menu-item-badge">LONG NECK 330ML</span>
+                      <span class="menu-item-cta">PEDIR &rarr;</span>
+                    </div>
+                  </div>
+                </div>
+              </a>
+
+              <!-- 15. Suco Natural -->
+              <a href="https://pedido.brendi.com.br/nugrill-hamburgueria-artesanal/produto/suco-natural" target="_blank" rel="noopener" class="menu-card-link" data-category="bebidas">
+                <div class="menu-card">
+                  <div class="menu-card-thumb">
+                    <img src="assets/suco.jpg" onerror="this.src='https://images.unsplash.com/photo-1613478223719-2ab802602423?auto=format&fit=crop&w=400&q=80'" alt="Suco Natural" loading="lazy">
+                  </div>
+                  <div class="menu-card-body">
+                    <div class="menu-card-header">
+                      <span class="menu-item-name">Suco Natural</span>
+                      <span class="menu-item-price">R$ 9,90</span>
+                    </div>
+                    <p class="menu-item-desc">Suco natural preparado na hora, refrescante e saboroso (Laranja ou Limonada).</p>
+                    <div class="menu-card-footer">
+                      <span class="menu-item-badge">NATURAL 400ML</span>
+                      <span class="menu-item-cta">PEDIR &rarr;</span>
+                    </div>
+                  </div>
+                </div>
+              </a>
+
+              <!-- 16. Sobremesa da Casa -->
+              <a href="https://pedido.brendi.com.br/nugrill-hamburgueria-artesanal/produto/sobremesa" target="_blank" rel="noopener" class="menu-card-link" data-category="bebidas">
+                <div class="menu-card">
+                  <div class="menu-card-thumb">
+                    <img src="assets/sobremesa.jpg" onerror="this.src='https://images.unsplash.com/photo-1606313564200-e75d5e30476c?auto=format&fit=crop&w=400&q=80'" alt="Sobremesa da Casa" loading="lazy">
+                  </div>
+                  <div class="menu-card-body">
+                    <div class="menu-card-header">
+                      <span class="menu-item-name">Sobremesa Artesanal</span>
+                      <span class="menu-item-price">R$ 14,90</span>
+                    </div>
+                    <p class="menu-item-desc">Delicioso brownie artesanal de chocolate ou pudim de leite condensado cremoso da casa.</p>
+                    <div class="menu-card-footer">
+                      <span class="menu-item-badge">SOBREMESA</span>
+                      <span class="menu-item-cta">PEDIR &rarr;</span>
+                    </div>
+                  </div>
+                </div>
+              </a>
+
+            </div>
+          </div>
+
+          <p class="menu-microcopy">
+            Clique no produto para abrir o pedido direto, ou acesse o cardápio digital completo:
+          </p>
+
+          <!-- Main CTA: Abre o cardápio oficial solicitado -->
+          <a href="https://pedido.brendi.com.br/nugrill-hamburgueria-artesanal?utm_source=multistores" target="_blank" rel="noopener" class="btn-orange">
+            ABRIR CARDÁPIO
+          </a>
+        </div>
+      </section>
+
+      <!-- =========================================================
+           SEÇÃO 4: IMPACTO / DIFERENCIAIS
+           ========================================================= -->
+      <section class="section" id="section-3">
+        <div class="section-bg-accent" aria-hidden="true"></div>
+        <div class="section-inner">
+          <div class="impact-card">
+            <div class="impact-eyebrow">FEITO COM CAPRICHO, DO PÃO À CHAPA</div>
+            <h2 class="impact-lead">
+              CADA MORDIDA<br><span class="text-orange">BEM PENSADA</span>
+            </h2>
+            <div class="impact-highlight">NÃO É SÓ LANCHE. É O SEU PRÓXIMO FAVORITO.</div>
+            <p class="impact-text">
+              Ingredientes de qualidade, atendimento atencioso e um cardápio variado, com lanches clássicos e combinações como bacon e queijo coalho.
+            </p>
+            <button class="btn-secondary" onclick="goToSection(2)">VER O CARDÁPIO</button>
+          </div>
+        </div>
+      </section>
+
+      <!-- =========================================================
+           SEÇÃO 5: PROVA SOCIAL (AVALIAÇÕES REAIS)
+           ========================================================= -->
+      <section class="section" id="section-4">
+        <div class="section-bg-accent" aria-hidden="true"></div>
+        <div class="section-inner">
+          <div class="section-eyebrow">4,9 · 184 AVALIAÇÕES NO GOOGLE</div>
+          <h2 class="section-title">QUEM PROVOU, <span class="text-orange">RECOMENDA</span></h2>
+          <div class="section-divider"></div>
+
+          <div class="reviews-grid">
+            <div class="review-card">
+              <div class="review-stars">★★★★★</div>
+              <p class="review-quote">"Simplesmente a melhor hamburgueria de rio preto."</p>
+              <div>
+                <div class="review-author">Danielle Datorre</div>
+                <div class="review-source">Avaliação no Google</div>
+              </div>
+            </div>
+
+            <div class="review-card">
+              <div class="review-stars">★★★★★</div>
+              <p class="review-quote">"Atendimento impecável! Explicam cada detalhe do cardápio e o lanche é super saboroso."</p>
+              <div>
+                <div class="review-author">Mayara</div>
+                <div class="review-source">Avaliação no Google</div>
+              </div>
+            </div>
+
+            <div class="review-card">
+              <div class="review-stars">★★★★★</div>
+              <p class="review-quote">"O hambúrguer com queijo coalho é sensacional. Tudo feito com muito capricho."</p>
+              <div>
+                <div class="review-author">Cliente Verificado</div>
+                <div class="review-source">Avaliação no Google</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- =========================================================
+           SEÇÃO 6: PEDIDO / CONTATO / LOCALIZAÇÃO
+           ========================================================= -->
+      <section class="section" id="section-5">
+        <div class="section-bg-accent" aria-hidden="true"></div>
+        <div class="section-inner">
+          <div class="section-eyebrow">PEÇA OU VENHA NOS VISITAR</div>
+          <h2 class="section-title">GARANTA O <span class="text-orange">SEU LANCHE</span></h2>
+          <div class="section-divider"></div>
+
+          <div class="contact-container">
+            <!-- Pedido Rápido -->
+            <div class="action-card">
+              <div class="card-title-sm">PEÇA DIRETO PELOS CANAIS OFICIAIS</div>
+              <p style="font-size: 13px; color: #CCCCCC; line-height: 1.5;">
+                Escolha seus lanches favoritos e receba onde estiver ou retire no balcão.
+              </p>
+
+              <div class="delivery-modes">
+                <span class="mode-pill">No local</span>
+                <span class="mode-pill">Para viagem</span>
+                <span class="mode-pill">Entrega sem contato</span>
+              </div>
+
+              <a href="https://pedido.brendi.com.br/nugrill-hamburgueria-artesanal?utm_source=multistores" target="_blank" rel="noopener" class="btn-orange">
+                PEDIR NO CARDÁPIO
+              </a>
+
+              <a href="https://wa.me/5517997162574?text=Ol%C3%A1!%20Gostaria%20de%20fazer%20um%20pedido." target="_blank" rel="noopener" class="btn-secondary">
+                WHATSAPP (17) 99716-2574
+              </a>
+
+              <div class="price-estimate">
+                💡 Estimativa média informada por clientes: R$ 40 a R$ 60 por pessoa.
+              </div>
+            </div>
+
+            <!-- Informações & Localização -->
+            <div class="contact-info-card">
+              <div class="info-grid">
+                <!-- Unidade Sul -->
+                <div class="info-block">
+                  <div class="info-title">📍 UNIDADE SUL</div>
+                  <div class="info-text">
+                    R. Francisco Alves, 446 - Jardim Santa Catarina<br>
+                    São José do Rio Preto - SP, 15080-190
+                  </div>
+                  <a href="https://maps.google.com/?q=R.+Francisco+Alves,+446+-+Jardim+Santa+Catarina,+S%C3%A3o+Jos%C3%A9+do+Rio+Preto+-+SP" target="_blank" rel="noopener" class="info-link">
+                    Abrir no Google Maps &rarr;
+                  </a>
+                </div>
+                <!-- Unidade Norte (Placeholder/Exemplo) -->
+                <div class="info-block">
+                  <div class="info-title">📍 UNIDADE NORTE</div>
+                  <div class="info-text">
+                    Endereço da Unidade Norte<br>
+                    São José do Rio Preto - SP
+                  </div>
+                  <a href="#" target="_blank" rel="noopener" class="info-link">
+                    Abrir no Google Maps &rarr;
+                  </a>
+                </div>
+              </div>
+              <div class="info-block" style="margin-top: 24px; margin-bottom: 0;">
+                <div class="info-title">🕒 HORÁRIO DE ATENDIMENTO</div>
+                <div class="info-text">
+                  Aberto a partir das 18:00 (Verificar disponibilidade por unidade)
+                </div>
+              </div>
+              <div class="info-block" style="margin-bottom: 0;">
+                <div class="info-title">📞 TELEFONE DIRETO</div>
+                <div class="info-text">
+                  (17) 99716-2574
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <footer class="site-footer">
+            Nugrill 2 Hamburgueria Artesanal — Unidade Sul · São José do Rio Preto - SP
+          </footer>
+        </div>
+      </section>
+
+    </div>
+  </main>
+
+  <!-- Fullpage Section Scroll Engine & Dynamic Menu Filter -->
+  <script>
+    const totalSections = 6;
+    let currentIndex = 0;
+    let isAnimating = false;
+    const animationDuration = 850; // ms
+
+    const sliderTrack = document.getElementById('sliderTrack');
+    const navLinks = document.querySelectorAll('.nav-link');
+    const dots = document.querySelectorAll('.dot');
+
+    function updateNavigationUI(index) {
+      navLinks.forEach((link, i) => {
+        if (i === index) link.classList.add('active');
+        else link.classList.remove('active');
+      });
+
+      dots.forEach((dot, i) => {
+        if (i === index) dot.classList.add('active');
+        else dot.classList.remove('active');
+      });
+    }
+
+    function goToSection(index) {
+      if (index < 0 || index >= totalSections) return;
+      if (index === currentIndex && !isAnimating) return;
+      if (isAnimating) return;
+
+      isAnimating = true;
+      currentIndex = index;
+
+      sliderTrack.style.transform = `translateY(-${currentIndex * 100}%)`;
+      updateNavigationUI(currentIndex);
+
+      // Lock scroll during transition
+      setTimeout(() => {
+        isAnimating = false;
+      }, animationDuration + 50);
+    }
+
+    // Wheel Event for Desktops & Laptops
+    let wheelAccumulator = 0;
+    let wheelTimeout = null;
+
+    // Handle internal scroll container so wheel doesn't jump section when scrolling items
+    const menuScrollContainer = document.querySelector('.menu-scroll-container');
+    if (menuScrollContainer) {
+      menuScrollContainer.addEventListener('wheel', (e) => {
+        const atTop = menuScrollContainer.scrollTop === 0;
+        const atBottom = menuScrollContainer.scrollHeight - menuScrollContainer.scrollTop <= menuScrollContainer.clientHeight + 2;
+
+        if ((e.deltaY > 0 && !atBottom) || (e.deltaY < 0 && !atTop)) {
+          e.stopPropagation();
+        }
+      }, { passive: true });
+    }
+
+    window.addEventListener('wheel', (e) => {
+      // Check if mouse is hovering scrollable menu container
+      if (menuScrollContainer && menuScrollContainer.contains(e.target)) {
+        const atTop = menuScrollContainer.scrollTop === 0;
+        const atBottom = menuScrollContainer.scrollHeight - menuScrollContainer.scrollTop <= menuScrollContainer.clientHeight + 2;
+        if ((e.deltaY > 0 && !atBottom) || (e.deltaY < 0 && !atTop)) {
+          return; // Let menu container scroll internally
+        }
+      }
+
+      e.preventDefault();
+      if (isAnimating) return;
+
+      wheelAccumulator += e.deltaY;
+
+      clearTimeout(wheelTimeout);
+      wheelTimeout = setTimeout(() => {
+        wheelAccumulator = 0;
+      }, 200);
+
+      const threshold = 35;
+      if (wheelAccumulator > threshold) {
+        wheelAccumulator = 0;
+        goToSection(currentIndex + 1);
+      } else if (wheelAccumulator < -threshold) {
+        wheelAccumulator = 0;
+        goToSection(currentIndex - 1);
+      }
+    }, { passive: false });
+
+    // Keyboard Arrow Keys
+    window.addEventListener('keydown', (e) => {
+      if (['ArrowDown', 'PageDown', ' '].includes(e.key)) {
+        e.preventDefault();
+        goToSection(currentIndex + 1);
+      } else if (['ArrowUp', 'PageUp'].includes(e.key)) {
+        e.preventDefault();
+        goToSection(currentIndex - 1);
+      } else if (e.key === 'Home') {
+        e.preventDefault();
+        goToSection(0);
+      } else if (e.key === 'End') {
+        e.preventDefault();
+        goToSection(totalSections - 1);
+      }
+    });
+
+    // Touch Event Gestures for Mobile / Tablets
+    let touchStartY = 0;
+    let touchStartX = 0;
+    let touchStartTime = 0;
+
+    window.addEventListener('touchstart', (e) => {
+      if (e.touches.length === 1) {
+        touchStartY = e.touches[0].clientY;
+        touchStartX = e.touches[0].clientX;
+        touchStartTime = Date.now();
+      }
+    }, { passive: true });
+
+    window.addEventListener('touchmove', (e) => {
+      // Allow internal scrolling on menu container if touched inside
+      if (menuScrollContainer && menuScrollContainer.contains(e.target)) {
+        return;
+      }
+      e.preventDefault();
+    }, { passive: false });
+
+    window.addEventListener('touchend', (e) => {
+      if (isAnimating) return;
+      if (menuScrollContainer && menuScrollContainer.contains(e.target)) {
+        return;
+      }
+
+      if (e.changedTouches.length === 1) {
+        const touchEndY = e.changedTouches[0].clientY;
+        const touchEndX = e.changedTouches[0].clientX;
+        const diffY = touchStartY - touchEndY;
+        const diffX = touchStartX - touchEndX;
+        const elapsedTime = Date.now() - touchStartTime;
+
+        if (Math.abs(diffY) > Math.abs(diffX) && Math.abs(diffY) > 40 && elapsedTime < 700) {
+          if (diffY > 0) {
+            goToSection(currentIndex + 1);
+          } else {
+            goToSection(currentIndex - 1);
+          }
+        }
+      }
+    }, { passive: true });
+
+    // Menu Category Filter logic
+    function filterMenu(category) {
+      const pills = document.querySelectorAll('.filter-pill');
+      pills.forEach(pill => pill.classList.remove('active'));
+      event.target.classList.add('active');
+
+      const items = document.querySelectorAll('.menu-card-link');
+      items.forEach(item => {
+        if (category === 'all' || item.getAttribute('data-category') === category) {
+          item.style.display = 'block';
+        } else {
+          item.style.display = 'none';
+        }
+      });
+
+      // Reset scroll position on filter
+      if (menuScrollContainer) {
+        menuScrollContainer.scrollTop = 0;
+      }
+    }
+
+    // Dynamic viewport height handler
+    function setViewportHeight() {
+      const vh = window.innerHeight * 0.01;
+      document.documentElement.style.setProperty('--vh', `${vh}px`);
+    }
+    window.addEventListener('resize', setViewportHeight);
+    setViewportHeight();
+  </script>
+</body>
+</html>
